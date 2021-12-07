@@ -24,5 +24,5 @@ class AmountPurchases
   basket.each { |_, value| basket_price += value[:total_price] }
 
   p basket
-  p "Цена за все: #{basket_price}"
+  p "Price for everything: #{basket_price}"
 end
