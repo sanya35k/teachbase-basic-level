@@ -13,7 +13,7 @@ class Station
   end
 
   def trains_list
-    trains.map(&:number).join(' ')
+    trains.map(&:number).join
   end
 
   def trains_list_by_type(type)
@@ -23,4 +23,8 @@ class Station
   def remove_train(train)
     trains.delete(train)
   end
+
+  private
+
+  attr_writer :trains
 end

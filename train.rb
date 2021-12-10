@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 class Train
-  attr_reader :number, :type, :carriages, :speed, :route, :current_station_index
+  attr_reader :number, :carriages, :speed, :route, :current_station_index
 
-  def initialize(number, type)
+  def initialize(number)
     @number = number
-    @type = type
     @carriages = []
 
     @speed = 0
@@ -21,12 +20,16 @@ class Train
     self.speed -= value if value <= @speed.positive?
   end
 
-  def add_carriage(carriage)
-    carriages << carriage if speed.zero?
+  def current_carriages(carriage)
+    carriages[carriage]
   end
 
-  def remove_carriage(carriage)
-    carriages.delete_at(-1) if speed.zero? && carriage.positive?
+  def add_carriage(carriage)
+    carriages << carriage if speed.zero? && carriage.type == type
+  end
+
+  def remove_carriage
+    carriages.delete_at(-1) if speed.zero?
   end
 
   def add_route(route)
@@ -44,4 +47,8 @@ class Train
   def previous_station
     route.stations[current_station_index - 1] if current_station_index >= 1
   end
+
+  private
+
+  attr_writer :speed, :route, :current_station_index, :carriages
 end

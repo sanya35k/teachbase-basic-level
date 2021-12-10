@@ -18,4 +18,8 @@ class Route
   def stations_list
     puts stations.map(&:name)
   end
+
+  private
+
+  attr_writer :stations
 end
