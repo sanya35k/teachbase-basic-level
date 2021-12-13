@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class Train
-  attr_reader :number, :carriages, :speed, :route, :current_station_index
+  include Company
+
+  @instances = {}
+
+  attr_reader :number, :carriages, :speed, :route, :current_station_index, :instances
 
   def initialize(number)
     @number = number
@@ -10,6 +14,8 @@ class Train
     @speed = 0
     @route = nil
     @current_station_index = 0
+
+    instances[number] = self
   end
 
   def acceleration(value)
@@ -46,6 +52,16 @@ class Train
 
   def previous_station
     route.stations[current_station_index - 1] if current_station_index >= 1
+  end
+
+  class << self
+    def all
+      instances
+    end
+
+    def find(number)
+      instances[number]
+    end
   end
 
   private

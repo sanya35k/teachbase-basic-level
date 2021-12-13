@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
 class Station
-  attr_reader :name, :trains
+  attr_reader :name, :trains, :instances
+
+  @instances = []
 
   def initialize(name)
     @name = name
     @trains = []
+
+    instances << self
   end
 
   def add_train(train)
@@ -22,6 +26,10 @@ class Station
 
   def remove_train(train)
     trains.delete(train)
+  end
+
+  def self.all
+    instances
   end
 
   private
