@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'company'
+
 class Carriage
+  include Company
+
   def type
-    puts 'For future overriding...'
+    raise 'For future overriding...'
   end
 
   def info

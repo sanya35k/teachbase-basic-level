@@ -3,9 +3,13 @@
 class Station
   attr_reader :name, :trains
 
+  @instances = []
+
   def initialize(name)
     @name = name
     @trains = []
+
+    instances << self
   end
 
   def add_train(train)
@@ -26,6 +30,18 @@ class Station
 
   def each_train(&block)
     trains.each { |train| block.call(train) }
+  end
+
+  def instances
+    self.class.instances
+  end
+
+  class << self
+    attr_reader :instances
+
+    def all
+      instances
+    end
   end
 
   private

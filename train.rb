@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'company'
+
 class Train
+  include Company
+
+  @instances = {}
+
   attr_reader :number, :carriages, :speed, :route, :current_station_index
 
   def initialize(number)
@@ -10,6 +16,19 @@ class Train
     @speed = 0
     @route = nil
     @current_station_index = 0
+
+    instances_number_nil_exception
+  end
+
+  def instances_number_nil_exception
+    begin exc = instances[number].nil?
+    rescue StandardError
+      return nil
+    end
+
+    return unless exc
+
+    instances[number] = self
   end
 
   def acceleration(value)
@@ -50,6 +69,26 @@ class Train
 
   def each_carriage(&block)
     carriages.each { |carriage| block.call(carriage) }
+  end
+
+  def type
+    raise 'For future overriding...'
+  end
+
+  def instances
+    self.class.instances
+  end
+
+  class << self
+    attr_reader :instances
+
+    def all
+      instances
+    end
+
+    def find(number)
+      instances[number]
+    end
   end
 
   private
