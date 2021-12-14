@@ -151,11 +151,6 @@ class Main # rubocop:disable Metrics/ClassLength
   def station_info(station)
     station.each_train do |train|
       puts "-Number: #{train.number}, Type: #{train.type}, Carriages: #{train.carriages.count}"
-      i = 1
-      train.each_carriage do |carriage|
-        puts "#{i}: #{carriage.info}"
-        i += 1
-      end
     end
   end
 
