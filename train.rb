@@ -48,6 +48,10 @@ class Train
     route.stations[current_station_index - 1] if current_station_index >= 1
   end
 
+  def each_carriage
+    carriages.each { |carriage| yield(carriage) }
+  end
+
   private
 
   attr_writer :speed, :route, :current_station_index, :carriages

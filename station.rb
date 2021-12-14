@@ -24,6 +24,10 @@ class Station
     trains.delete(train)
   end
 
+  def each_train
+    trains.each { |train| yield(train) }
+  end
+
   private
 
   attr_writer :trains

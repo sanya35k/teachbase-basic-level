@@ -4,4 +4,8 @@ class PassengerCarriage < Carriage
   def type
     :passenger
   end
+
+  def info
+    "Type: #{type}"
+  end
 end
