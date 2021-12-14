@@ -48,8 +48,8 @@ class Train
     route.stations[current_station_index - 1] if current_station_index >= 1
   end
 
-  def each_carriage
-    carriages.each { |carriage| yield(carriage) }
+  def each_carriage(&block)
+    carriages.each { |carriage| block.call(carriage) }
   end
 
   private
