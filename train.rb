@@ -2,14 +2,18 @@
 
 require_relative 'company'
 require_relative 'instance_counter'
+require_relative 'validation'
 
 class Train
   include Company
   include InstanceCounter
+  include Validation
 
   attr_reader :number, :carriages, :speed, :route, :current_station_index
 
-  def initialize(number)
+  TRAIN_NUMBER_FORMAT = /^[A-Z\d](-[a-z\d]{2})?$/i.freeze
+
+  def initialize(number, type = :cargo)
     @number = number
     @carriages = []
 
@@ -18,6 +22,9 @@ class Train
     @current_station_index = 0
 
     register_instance
+
+    validate!
+    @type = type
   end
 
   def acceleration(value)
@@ -62,6 +69,11 @@ class Train
 
   def type
     raise 'For future overriding...'
+  end
+
+  def validate!
+    raise ArgumentError, 'Train name not specified!' if @number.nil?
+    raise ArgumentError, "Invalid number of carriage!('A-12' or 'B-fa')" unless @number =~ TRAIN_NUMBER_FORMAT
   end
 
   private

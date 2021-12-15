@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'instance_counter'
+require_relative 'validation'
 
 class Station
   include InstanceCounter
+  include Validation
 
   attr_reader :name, :trains
 
@@ -13,8 +15,9 @@ class Station
     @name = name
     @trains = []
 
-    @all_stations.push(self)
     register_instance
+
+    validate!
   end
 
   def add_train(train)
@@ -39,6 +42,12 @@ class Station
 
   def self.all
     @all_stations
+  end
+
+  def validate!
+    raise ArgumentError, 'Station name not specified!' if @name.nil?
+    raise ArgumentError, 'Station name cannot be empty!' if @name.empty?
+    raise ArgumentError, 'Station name cannot start with a space!' if @name[0] == ' '
   end
 
   private
