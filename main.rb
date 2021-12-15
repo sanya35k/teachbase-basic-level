@@ -10,7 +10,7 @@ require_relative 'passenger_carriage'
 require_relative 'passenger_train'
 
 class Main # rubocop:disable Metrics/ClassLength
-  attr_reader :stations, :trains
+  attr_accessor :stations, :trains
 
   def initialize
     @stations = []
@@ -27,6 +27,10 @@ class Main # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def invalid_value
+    puts 'You entered invalid value!'
+  end
+
   ACTIONS = {
     1 => :create_station,
     2 => :create_train,
@@ -40,8 +44,6 @@ class Main # rubocop:disable Metrics/ClassLength
 
   private
 
-  attr_writer :stations, :trains
-
   def choose_action
     puts %(0 - Exit
 1 - Create station
@@ -52,14 +54,37 @@ class Main # rubocop:disable Metrics/ClassLength
 6 - List of stations
 7 - List of trains
 8 - List of stations and list of trains at the station\nChoose your action:)
-    gets.chomp.to_i
+    choose_action_get_value
+  end
+
+  def choose_action_get_value
+    change = gets.chomp.to_i
+    if change <= 8 && change >= 0
+      change
+    else
+      invalid_value
+    end
   end
 
   def create_station
     puts 'Enter station name:'
     station_name = gets.chomp
-    stations << Station.new(station_name)
-    puts "-Station #{station_name} successful created!"
+    if find_station(station_name)
+      puts 'Station with the same number already exists!'
+    else
+      stations << Station.new(station_name)
+      puts "-Station #{station_name} successful created!"
+    end
+  rescue ArgumentError => e
+    puts e.message
+  end
+
+  def find_station(name)
+    stations.find { |x| return x if x.name == name }
+  end
+
+  def find_train(number)
+    trains.find { |x| return x if x.number == number }
   end
 
   def create_train
@@ -69,7 +94,17 @@ class Main # rubocop:disable Metrics/ClassLength
     train_type = gets.chomp.to_i
     puts 'Enter train number:'
     train_number = gets.chomp
-    create_train_type(train_type, train_number)
+    check_same_trains(train_number, train_type)
+  rescue ArgumentError => e
+    puts e.message
+  end
+
+  def check_same_trains(train_number, train_type)
+    if find_train(train_number)
+      puts 'Train with the same number already exists!'
+    else
+      create_train_type(train_type, train_number)
+    end
   end
 
   def create_train_type(train_type, train_number)
@@ -81,7 +116,7 @@ class Main # rubocop:disable Metrics/ClassLength
       trains << CargoTrain.new(train_number)
       puts "-Cargo train successful created with number - #{train_number}!"
     else
-      'You entered invalid value!'
+      puts 'You entered invalid value!'
     end
   end
 
