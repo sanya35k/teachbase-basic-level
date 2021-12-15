@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'company'
+require_relative 'instance_counter'
 
 class Train
   include Company
-
-  @instances = {}
+  include InstanceCounter
 
   attr_reader :number, :carriages, :speed, :route, :current_station_index
 
@@ -17,18 +17,7 @@ class Train
     @route = nil
     @current_station_index = 0
 
-    instances_number_nil_exception
-  end
-
-  def instances_number_nil_exception
-    begin exc = instances[number].nil?
-    rescue StandardError
-      return nil
-    end
-
-    return unless exc
-
-    instances[number] = self
+    register_instance
   end
 
   def acceleration(value)
@@ -73,22 +62,6 @@ class Train
 
   def type
     raise 'For future overriding...'
-  end
-
-  def instances
-    self.class.instances
-  end
-
-  class << self
-    attr_reader :instances
-
-    def all
-      instances
-    end
-
-    def find(number)
-      instances[number]
-    end
   end
 
   private

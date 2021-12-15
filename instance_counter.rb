@@ -7,15 +7,23 @@ module InstanceCounter
   end
 
   module ClassMethods
-    attr_accessor :instances
+    def instances
+      @instances || 0
+    end
+
+    private
+
+    def register_instance
+      @instances ||= 0
+      @instances += 1
+    end
   end
 
   module InstanceMethods
     protected
 
     def register_instance
-      self.class.instances ||= 0
-      self.class.instances += 1
+      self.class.send :register_instance
     end
   end
 end

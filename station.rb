@@ -1,15 +1,20 @@
 # frozen_string_literal: true
 
+require_relative 'instance_counter'
+
 class Station
+  include InstanceCounter
+
   attr_reader :name, :trains
 
-  @instances = []
+  @all_stations = []
 
   def initialize(name)
     @name = name
     @trains = []
 
-    instances << self
+    @all_stations.push(self)
+    register_instance
   end
 
   def add_train(train)
@@ -32,16 +37,8 @@ class Station
     trains.each { |train| block.call(train) }
   end
 
-  def instances
-    self.class.instances
-  end
-
-  class << self
-    attr_reader :instances
-
-    def all
-      instances
-    end
+  def self.all
+    @all_stations
   end
 
   private
