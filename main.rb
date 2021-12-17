@@ -39,7 +39,8 @@ class Main # rubocop:disable Metrics/ClassLength
     5 => :add_train_to_station,
     6 => :put_stations_list,
     7 => :put_trains_list,
-    8 => :trains_on_station
+    8 => :trains_on_station,
+    9 => :carriages_train
   }.freeze
 
   private
@@ -51,15 +52,15 @@ class Main # rubocop:disable Metrics/ClassLength
 3 - Add carriage to the train
 4 - Remove carriage from the train
 5 - Add train to the station
-6 - List of stations
-7 - List of trains
-8 - List of stations and list of trains at the station\nChoose your action:)
+6 - List of stations\n7 - List of trains
+8 - List of stations and list of trains at the station
+9 - List of trains and list of carriages\nChoose your action:)
     choose_action_get_value
   end
 
   def choose_action_get_value
     change = gets.chomp.to_i
-    if change <= 8 && change >= 0
+    if change <= 9 && change >= 0
       change
     else
       invalid_value
@@ -130,13 +131,27 @@ class Main # rubocop:disable Metrics/ClassLength
   end
 
   def add_carriage_type(train)
+    puts 'Enter company name:'
+    company_name = gets.chomp
     case train.type
     when :passenger
-      train.add_carriage(PassengerCarriage.new)
+      pass_type(train, company_name)
     when :cargo
-      train.add_carriage(CargoCarriage.new)
+      c_type(train)
     end
     puts '-Carriage successful added to the train!'
+  end
+
+  def pass_type(train, company_name)
+    puts 'Enter the number of seats:'
+    seats = gets.chomp.to_i
+    train.add_carriage(PassengerCarriage.new(company_name, seats))
+  end
+
+  def c_type(train, company_name)
+    puts 'Enter value volume:'
+    volume = gets.chomp.to_i
+    train.add_carriage(CargoCarriage.new(company_name, volume))
   end
 
   def remove_carriage
@@ -187,6 +202,41 @@ class Main # rubocop:disable Metrics/ClassLength
     station.each_train do |train|
       puts "-Number: #{train.number}, Type: #{train.type}, Carriages: #{train.carriages.count}"
     end
+  end
+
+  def train_info(train)
+    case train.type
+    when :cargo
+      cargo_type(train)
+    when :passenger
+      passenger_type(train)
+    end
+  end
+
+  def cargo_type(train)
+    i = 0
+    train.each_carriage do |carriage|
+      i += 1
+      puts "-Carriage: #{i}, Type: #{carriage.type}, Free volume: #{carriage.free_value_volume},
+Busy volume: #{carriage.busy_value_volume}"
+    end
+  end
+
+  def passenger_type(train)
+    i = 0
+    train.each_carriage do |carriage|
+      i += 1
+      puts "-Carriage: #{i}, Type: #{carriage.type}, Free seats: #{carriage.free_seats_passengers},
+Busy seats: #{carriage.busy_seats_passengers}"
+    end
+  end
+
+  def carriages_train
+    train = choose_train
+    return puts 'Trains not found' unless train
+
+    puts "List of carriages train #{train.number}:"
+    train_info(train)
   end
 
   def choose_train
