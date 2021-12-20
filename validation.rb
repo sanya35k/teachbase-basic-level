@@ -7,7 +7,7 @@ module Validation
   end
 
   module ClassMethods
-    def validate(attribute_name, validation_type, option = true)
+    def validate(attribute_name, validation_type, option = true) # rubocop:disable Style/OptionalBooleanParameter
       if validates_hash[attribute_name]
         validates_hash[attribute_name][validation_type] = {
           option: option, error_message: validation_errors(validation_type, attribute_name)
@@ -44,7 +44,7 @@ module Validation
   module InstanceMethods
     def validate!
       self.class.validates_hash.each do |attr_name, value|
-        value.each do |key, value|
+        value.each do |key, value| # rubocop:disable Lint/ShadowingOuterLocalVariable
           send("#{key}_validation", value[:error_message], attr_name, value[:option])
         end
       end
