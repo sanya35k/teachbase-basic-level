@@ -137,7 +137,7 @@ class Main # rubocop:disable Metrics/ClassLength
     when :passenger
       pass_type(train, company_name)
     when :cargo
-      c_type(train)
+      c_type(train, company_name)
     end
     puts '-Carriage successful added to the train!'
   end
