@@ -13,6 +13,9 @@ class Train
 
   TRAIN_NUMBER_FORMAT = /^[A-Z\d](-[a-z\d]{2})?$/i.freeze
 
+  validate :number, :format, TRAIN_NUMBER_FORMAT
+  validate :number, :presence
+
   def initialize(number, type = :cargo)
     @number = number
     @carriages = []
@@ -73,7 +76,7 @@ class Train
 
   def validate!
     raise ArgumentError, 'Train name not specified!' if @number.nil?
-    raise ArgumentError, "Invalid number of carriage!('A-12' or 'B-fa')" unless @number =~ TRAIN_NUMBER_FORMAT
+    raise ArgumentError, "Invalid number of carriage!('A-12' or 'b-fa')" unless @number =~ TRAIN_NUMBER_FORMAT
   end
 
   private

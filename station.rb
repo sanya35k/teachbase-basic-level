@@ -11,6 +11,8 @@ class Station
 
   @all_stations = []
 
+  validate :name, :presence
+
   def initialize(name)
     @name = name
     @trains = []

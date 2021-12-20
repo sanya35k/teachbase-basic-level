@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 require_relative 'company'
+require_relative 'validation'
 
 class Carriage
   include Company
+  include Validation
+
+  validate :company_name, :presence
 
   def initialize(company_name)
     @company_name = company_name

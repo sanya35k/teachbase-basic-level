@@ -3,6 +3,9 @@
 class CargoCarriage < Carriage
   attr_accessor :total_volume, :busy_volume
 
+  validate :total_volume, :presence
+  validate :total_volume, :type, Integer
+
   def initialize(company_name, total_volume)
     @total_volume = total_volume
     @busy_volume = 0
